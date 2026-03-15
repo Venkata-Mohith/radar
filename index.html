@@ -1997,7 +1997,6 @@ function cardOpen(event, el) {
 // ══════════════════════════════════════════════════════
 //  PWA — PROGRESSIVE WEB APP
 // ══════════════════════════════════════════════════════
-let pwaPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   pwaPrompt = e;
@@ -2054,7 +2053,6 @@ document.head.appendChild(mLink);
 // ══════════════════════════════════════════════════════
 //  RECENTLY VIEWED
 // ══════════════════════════════════════════════════════
-let RECENT = JSON.parse(localStorage.getItem('radar_recent') || '[]');
 function trackRecent(d) {
   RECENT = RECENT.filter(x => x.id !== d.id);
   RECENT.unshift({ id: d.id, title: d.title, img: d.img, url: d.url, type: d.type });
@@ -2082,8 +2080,6 @@ function clearRecent() {
 // ══════════════════════════════════════════════════════
 //  PERSONAL NOTES & RATING
 // ══════════════════════════════════════════════════════
-let NOTES = JSON.parse(localStorage.getItem('radar_notes') || '{}');
-let activeNoteId = null;
 
 function openNotes(id, title) {
   activeNoteId = id;
