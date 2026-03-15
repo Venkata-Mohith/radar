@@ -53,7 +53,7 @@ Inspired by [World Monitor](https://worldmonitor.app), built using only free API
 
 ## 🚀 Live Demo
 
-**[radarapp.io](https://radarapp.io)**
+**[radar-blush](https://radar-blush.vercel.app/)**
 
 Works on every device. On mobile, tap **Share → Add to Home Screen** to install it like a native app.
 
