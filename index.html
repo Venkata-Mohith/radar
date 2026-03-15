@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
@@ -521,7 +521,7 @@ main{padding:1.6rem 1.5rem;max-width:1600px;margin:0 auto}
     <span class="tstrip-now">▶ NOW PLAYING</span>
     <span class="tstrip-sub">— Latest Trailers &amp; Teasers</span>
   </div>
-  <div class="tscroll" id="tscroll"><div class="tmsg">🔑 Add TMDB key to unlock trailers</div></div>
+  <div class="tscroll" id="tscroll"><div class="tmsg">Loading trailers…</div></div>
 </div>
 
 <div class="mood-bar">
@@ -771,7 +771,7 @@ async function doSearch(q) {
       fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=5&sfw=true`).then(r=>r.json()),
       fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(q)}&limit=4&sfw=true`).then(r=>r.json()),
     ];
-    if (TMDB) ps.push(fetch(`/api/tmdb/search/tv?query=${encodeURIComponent(q)}`).then(r=>r.json()));
+    ps.push(fetch(`/api/tmdb/search/tv?query=${encodeURIComponent(q)}`).then(r=>r.json()));
     const [ad, md, td] = await Promise.all(ps);
     const items = [];
     (ad.data||[]).forEach(a=>items.push({title:a.title_english||a.title,type:'ANIME',color:'var(--anime)',img:a.images?.jpg?.small_image_url,url:a.url}));
@@ -1573,7 +1573,7 @@ async function loadKDrama(mode='airing'){
     const items=data.results||[];
     document.getElementById('st-kdrama').textContent=items.length;
     g.innerHTML=items.slice(0,24).map(k=>kdramaCard(k)).join('');
-  }catch(e){g.innerHTML=mkerr('Failed. Check TMDB key.');}
+  }catch(e){g.innerHTML=mkerr('Failed to load. Try again.');}
 }
 function kdramaCard(k){
   const img=k.poster_path?`https://image.tmdb.org/t/p/w342${k.poster_path}`:null;
@@ -1637,7 +1637,7 @@ async function loadStreaming(mode='new'){
       items=(tr.results||[]).slice(0,24);
     }
     g.innerHTML=items.length?items.map(s=>streamCard(s)).join(''):mkerr('No results found.');
-  }catch(e){g.innerHTML=mkerr('Failed. Check TMDB key.');}
+  }catch(e){g.innerHTML=mkerr('Failed to load. Try again.');}
 }
 function streamCard(s){
   const img=s.poster_path?`https://image.tmdb.org/t/p/w342${s.poster_path}`:null;
@@ -1845,7 +1845,7 @@ async function loadMyListCountdowns(){
 
   // ── KDRAMA & STREAMING & TV SHOWS: use TMDB to get next episode air date ──
   const tvItems = allItems.filter(x => x.type === 'KDRAMA' || x.type === 'STREAMING' || x.type === 'TV SHOW');
-  if (tvItems.length && TMDB) {
+  if (tvItems.length) {
     const tvResults = await Promise.all(tvItems.slice(0,6).map(async item => {
       try {
         // Extract TMDB id from URL if possible
