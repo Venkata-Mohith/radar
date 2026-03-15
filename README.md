@@ -197,7 +197,7 @@ Built entirely with [Claude](https://claude.ai) as the vibe-coding partner.
 
 **Built with ❤️ for the anime and KDrama community**
 
-[radarapp.io](https://radarapp.io) · [Report Bug](https://github.com/Venkata-Mohith/radar/issues) · [Request Feature](https://github.com/Venkata-Mohith/radar/discussions)
+[radar-blush](https://radar-blush.vercel.app/) · [Report Bug](https://github.com/Venkata-Mohith/radar/issues) · [Request Feature](https://github.com/Venkata-Mohith/radar/discussions)
 
 **⭐ Star this repo if RADAR is useful to you — it helps others find it! ⭐**
 
