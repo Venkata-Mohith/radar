@@ -6,7 +6,7 @@
 **A free, real-time dashboard for everything you watch and read.**  
 No account. No app store. No cost. Just open and use.
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-radarapp.io-ff2d55?style=for-the-badge)](https://radarapp.io)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-radarapp.io-ff2d55?style=for-the-badge)](https://radar-blush.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00b4ff?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-34d399?style=for-the-badge)](https://github.com/Venkata-Mohith/radar/pulls)
 [![Built with Vanilla JS](https://img.shields.io/badge/Built_with-Vanilla_JS-ffd700?style=for-the-badge)](https://radarapp.io)
