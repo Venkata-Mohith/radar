@@ -468,9 +468,12 @@ main{padding:1.6rem 1.5rem;max-width:1600px;margin:0 auto}
   .search-wrap{max-width:none;flex:1}
   .search-wrap input{font-size:.68rem;padding:.38rem 1.8rem .38rem .7rem}
   .hdr-r{gap:.35rem}
-  .live-b,#clock,.icon-btn.sur{display:none}
-  /* Show surprise as emoji-only on mobile */
-  .icon-btn.sur-m{display:flex}
+  .live-b,#clock{display:none}
+  /* Surprise: show emoji only, hide text */
+  .sur-text{display:none}
+  /* Share: show emoji only, hide text */
+  .share-text{display:none}
+  .share-app-btn{padding:.28rem .5rem;font-size:.82rem;letter-spacing:0;background:none;border:1px solid var(--border);color:var(--muted)}
   .icon-btn{padding:.28rem .45rem;font-size:.78rem}
 
   /* Cards: 2 columns on mobile */
@@ -536,8 +539,8 @@ main{padding:1.6rem 1.5rem;max-width:1600px;margin:0 auto}
   <div class="hdr-r">
     <div class="live-b"><div class="ldot"></div>LIVE</div>
     <div id="clock"></div>
-    <button class="icon-btn sur" onclick="surpriseMe()">🎲 SURPRISE</button>
-    <button class="share-app-btn" onclick="shareApp()" title="Share RADAR">📤 SHARE</button>
+    <button class="icon-btn sur" onclick="surpriseMe()">🎲 <span class="sur-text">SURPRISE</span></button>
+    <button class="share-app-btn" onclick="shareApp()" title="Share RADAR">📤 <span class="share-text">SHARE</span></button>
     <button class="icon-btn gold" id="notif-btn" onclick="toggleNotifs()" title="Notifications">🔔<span class="nbadge" id="nbadge"></span></button>
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌓</button>
   </div>
@@ -857,20 +860,31 @@ async function shareApp() {
     text: '🎌 Check out RADAR — a free dashboard for tracking anime, KDramas, manga, manhwa, countdowns & more!',
     url: 'https://radarapp.io'
   };
-  // Use native share sheet on mobile (iOS/Android)
-  if (navigator.share) {
+
+  // Mobile (Android/iOS) — uses native OS share sheet
+  if (navigator.share && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
     try {
       await navigator.share(shareData);
       return;
-    } catch(e) { /* user cancelled */ return; }
+    } catch(e) { return; } // user cancelled
   }
-  // Desktop fallback: copy to clipboard
-  const text = `${shareData.text}\n${shareData.url}`;
+
+  // Desktop (Windows / Mac / Linux) — copy to clipboard
+  const text = `🎌 RADAR — Anime & KDrama Intelligence\n${shareData.text}\n\n🌐 ${shareData.url}`;
   try {
     await navigator.clipboard.writeText(text);
-    toast('📤 Copied!', 'Link copied to clipboard — share with your friends!');
+    toast('📤 Copied!', 'Link & message copied — paste anywhere to share!');
   } catch(e) {
-    toast('🌐 RADAR', 'Visit: radarapp.io');
+    // Final fallback: old execCommand method (works everywhere)
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    toast('📤 Copied!', 'Link copied to clipboard!');
   }
 }
 
