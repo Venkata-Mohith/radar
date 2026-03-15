@@ -442,23 +442,85 @@ main{padding:1.6rem 1.5rem;max-width:1600px;margin:0 auto}
 .ep-prog-fill{height:100%;background:var(--anime);border-radius:2px;transition:width .3s ease}
 
 
+/* ══ SHARE BUTTON ══ */
+.share-app-btn{background:linear-gradient(135deg,var(--kdrama),var(--manga));color:#fff;border:none;padding:.32rem .8rem;font-family:var(--font-mono);font-size:.62rem;font-weight:500;letter-spacing:.06em;border-radius:5px;cursor:pointer;transition:opacity .2s,transform .15s;white-space:nowrap;flex-shrink:0}
+.share-app-btn:hover{opacity:.88;transform:scale(1.03)}
+
 /* ══ SCROLLBAR + RESPONSIVE ══ */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:2px}
+
+/* Tablet */
+@media(max-width:900px){
   .cal-grid{grid-template-columns:repeat(4,1fr)}
   .stats-layout{grid-template-columns:1fr}
   .buzz-layout{grid-template-columns:1fr}
+  .live-b,#clock{display:none}
 }
+
+/* Mobile */
 @media(max-width:600px){
-  main{padding:1rem}
+  main{padding:.75rem}
+  header{padding:0 .75rem;height:54px;gap:.5rem}
+  .logo{font-size:1.6rem}
+  .logo span{display:none}
+  .search-wrap{max-width:none;flex:1}
+  .search-wrap input{font-size:.68rem;padding:.38rem 1.8rem .38rem .7rem}
+  .hdr-r{gap:.35rem}
+  .live-b,#clock,.icon-btn.sur{display:none}
+  /* Show surprise as emoji-only on mobile */
+  .icon-btn.sur-m{display:flex}
+  .icon-btn{padding:.28rem .45rem;font-size:.78rem}
+
+  /* Cards: 2 columns on mobile */
+  .grid{grid-template-columns:repeat(2,1fr);gap:.6rem}
+  .cbody{padding:.5rem}
+  .ctitle{font-size:.78rem}
+  .cmeta{font-size:.55rem}
+  .hbar{height:2px}
+
+  /* Hero: stack vertically */
   .hero{grid-template-columns:1fr}
-  .hero-img{height:150px}
+  .hero-img{height:160px;width:100%}
   .hero-title{font-size:1.8rem}
-  header{padding:0 1rem}
-  .search-wrap{max-width:160px}
+  .hero-body{padding:1rem}
+
+  /* Trailer thumbnails smaller on mobile */
+  .tthumb{width:200px;height:113px}
+
+  /* Calendar: 2 cols */
   .cal-grid{grid-template-columns:repeat(2,1fr)}
   .stats-num-row{grid-template-columns:repeat(2,1fr)}
+
+  /* Section title smaller */
+  .sec-title{font-size:2rem}
+
+  /* Filter buttons bigger touch targets */
+  .fbtn{padding:.38rem .85rem;font-size:.62rem}
+  .mbtn{padding:.32rem .8rem;font-size:.6rem}
+  .tab{padding:.65rem .75rem;font-size:.58rem}
+
+  /* List move buttons bigger on mobile */
+  .list-move{display:flex !important}
+  .lm-btn{font-size:.55rem;padding:3px 7px}
+
+  /* Hover card: disabled on mobile (use tap instead) */
+  #hcard{display:none}
+
+  /* Bottom safe area for iPhone */
+  main{padding-bottom:calc(.75rem + env(safe-area-inset-bottom))}
+
+  /* Countdown grid single col */
+  .cd-grid{grid-template-columns:1fr}
+
+  /* Rank items */
+  .rank-item{grid-template-columns:28px 44px 1fr auto}
+  .rank-poster{width:44px;height:60px}
+  .rank-score{font-size:1.3rem}
+
+  /* Stats layout */
+  .stats-layout{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -475,7 +537,8 @@ main{padding:1.6rem 1.5rem;max-width:1600px;margin:0 auto}
     <div class="live-b"><div class="ldot"></div>LIVE</div>
     <div id="clock"></div>
     <button class="icon-btn sur" onclick="surpriseMe()">🎲 SURPRISE</button>
-    <button class="icon-btn gold" id="notif-btn" onclick="toggleNotifs()">🔔<span class="nbadge" id="nbadge"></span></button>
+    <button class="share-app-btn" onclick="shareApp()" title="Share RADAR">📤 SHARE</button>
+    <button class="icon-btn gold" id="notif-btn" onclick="toggleNotifs()" title="Notifications">🔔<span class="nbadge" id="nbadge"></span></button>
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌓</button>
   </div>
 </header>
@@ -785,6 +848,30 @@ function toggleTheme() {
   const next = cur==='dark'?'light':'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('radar_theme', next);
+}
+
+// ── SHARE APP ──────────────────────────────────────────
+async function shareApp() {
+  const shareData = {
+    title: 'RADAR — Anime & KDrama Intelligence',
+    text: '🎌 Check out RADAR — a free dashboard for tracking anime, KDramas, manga, manhwa, countdowns & more!',
+    url: 'https://radarapp.io'
+  };
+  // Use native share sheet on mobile (iOS/Android)
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch(e) { /* user cancelled */ return; }
+  }
+  // Desktop fallback: copy to clipboard
+  const text = `${shareData.text}\n${shareData.url}`;
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('📤 Copied!', 'Link copied to clipboard — share with your friends!');
+  } catch(e) {
+    toast('🌐 RADAR', 'Visit: radarapp.io');
+  }
 }
 
 // ══════════════════════════════════════════════════════
